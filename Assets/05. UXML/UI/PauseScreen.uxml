@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/05.%20UXML/Styles/ButtonStyle.uss?fileID=7433441132597879392&amp;guid=16becab96f5aaf64ab1a324a7652bebb&amp;type=3#ButtonStyle" />
+    <ui:VisualElement name="puase_container" style="flex-grow: 1;">
+        <ui:VisualElement name="pause_title_container" style="flex-grow: 1; width: 100%; height: 35%; justify-content: flex-end;">
+            <ui:Label tabindex="-1" text="Pause" parse-escape-sequences="true" display-tooltip-when-elided="true" name="pause_title_label" style="-unity-font: url(&quot;project://database/Assets/04%20Items/Fonts/LuckiestGuy/LuckiestGuy.ttf?fileID=12800000&amp;guid=46238fb1ad7a7a84ba8954c1c860994c&amp;type=3#LuckiestGuy&quot;); font-size: 150px; color: rgb(255, 255, 255); -unity-font-definition: initial; -unity-text-align: upper-center; justify-content: flex-start;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="pause_button_group" style="flex-grow: 1; width: 100%; height: 65%; flex-direction: row; justify-content: space-between; align-items: center; align-self: auto; padding-top: 150px; padding-bottom: 350px; padding-right: 500px; padding-left: 500px;">
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="back_button" class="pause-menu-button" />
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="setting_button" class="pause-menu-button" />
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="home_button" class="pause-menu-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

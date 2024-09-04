@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="HomeScreen" src="project://database/Assets/05.%20UXML/UI/HomeScreen.uxml?fileID=9197481963319205126&amp;guid=8a05a20015b04f742b9d5683da4458d6&amp;type=3#HomeScreen" />
+    <ui:Template name="LevelSelectionScreen" src="project://database/Assets/05.%20UXML/UI/LevelSelectionScreen.uxml?fileID=9197481963319205126&amp;guid=0251764c5ebf58f46ad4d33d99d6c11e&amp;type=3#LevelSelectionScreen" />
+    <ui:Template name="PauseScreen" src="project://database/Assets/05.%20UXML/UI/PauseScreen.uxml?fileID=9197481963319205126&amp;guid=76fd1e593bc1be74fbb1a8384c08e391&amp;type=3#PauseScreen" />
+    <ui:Template name="SettingScreen" src="project://database/Assets/05.%20UXML/UI/SettingScreen.uxml?fileID=9197481963319205126&amp;guid=9e3621eb7d5d6d146b5f52d5ec205a21&amp;type=3#SettingScreen" />
+    <ui:Instance template="HomeScreen" name="HomeScreen" style="position: absolute; width: 100%; height: 100%;" />
+    <ui:Instance template="LevelSelectionScreen" name="LevelSelectionScreen" style="position: absolute; width: 100%; height: 100%;" />
+    <ui:Instance template="PauseScreen" name="PauseScreen" style="position: absolute; width: 100%; height: 100%;" />
+    <ui:Instance template="SettingScreen" name="SettingScreen" style="width: 100%; height: 100%;" />
+</ui:UXML>
