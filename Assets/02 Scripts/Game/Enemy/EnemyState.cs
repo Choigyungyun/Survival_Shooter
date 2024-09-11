@@ -9,7 +9,7 @@ using GameSettingProperty;
 
 public class EnemyState : MonoBehaviour
 {
-    [SerializeField] private int enemyDamage = 0;           // 적 데미지
+    [SerializeField] protected int enemyDamage = 0;           // 적 데미지
     [SerializeField] private int enemyHp = 0;               // 적 체력
     [SerializeField] private int enemyScore = 0;            // 적 스코어
     [SerializeField] private float attackInterval = 0.0f;   // 적 공격 간격
