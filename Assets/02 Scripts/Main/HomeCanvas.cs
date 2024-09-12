@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using SurvivalShooter.Event;
 
-public class HomeCanvasEvent : CanvasManager
+public class HomeCanvas : CanvasManager
 {
     [Header("Panel Control")]
     [SerializeField] private float m_FadeTime = 0.0f;
@@ -23,11 +25,14 @@ public class HomeCanvasEvent : CanvasManager
     [Header("Setting Sliders")]
     [SerializeField] private Slider m_MainSoundSlider;
     [SerializeField] private Slider m_MusicSoundSlider;
-    [SerializeField] private Slider m_EffectSoundSlider;
+    [SerializeField] private Slider m_EffectsSoundSlider;
+
+    [Header("Audio Mix")]
+    [SerializeField] private AudioMixer m_MasterMixer;
 
     private void Start()
     {
-        Reeset();
+        HomeReeset();
 
         // Home Button Events
         m_StartButton.onClick.AddListener(GameStart);
@@ -36,9 +41,14 @@ public class HomeCanvasEvent : CanvasManager
 
         // Setting Button Events
         m_SettingBackButton.onClick.AddListener(() => PanelControl(m_HomePanel, true));
+
+        // Setting Sound Slider & Audio Mixer
+        m_MainSoundSlider.onValueChanged.AddListener(UIEvent.MasterSoundEvent.Invoke);
+        m_MusicSoundSlider.onValueChanged.AddListener(UIEvent.MusicSoundEvent.Invoke);
+        m_EffectsSoundSlider.onValueChanged.AddListener(UIEvent.EffectsSoundEvent.Invoke);
     }
 
-    private void Reeset()
+    private void HomeReeset()
     {
         m_CurrentFadeImage = m_FadePanel.GetComponent<Image>();
 

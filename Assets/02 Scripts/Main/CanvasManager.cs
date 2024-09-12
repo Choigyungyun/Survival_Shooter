@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class CanvasManager : MonoBehaviour
 {
-
     protected float m_CurrentFadeTime;
 
     protected GameObject m_PreviousPanel;
