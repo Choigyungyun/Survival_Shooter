@@ -17,6 +17,11 @@ public class PlayerSpawnManager : MonoBehaviour
 
     private void Start()
     {
+        SpawnPlayer();
+    }
+
+    private void SpawnPlayer()
+    {
         if (currentPlayer != null)
         {
             return;
@@ -24,8 +29,6 @@ public class PlayerSpawnManager : MonoBehaviour
         currentPlayer = Instantiate(playerObject);
 
         Camera.main.GetComponent<CameraMove>().targetTransform = currentPlayer.transform;
-        currentPlayer.GetComponent<PlayerState>().playerHpSlider = hpSlider;
-
-        hpSlider.gameObject.SetActive(true);
+        currentPlayer.GetComponent<PlayerState>().m_PlayerHpSlider = hpSlider;
     }
 }

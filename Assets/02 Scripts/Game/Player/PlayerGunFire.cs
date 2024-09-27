@@ -6,56 +6,56 @@ public class PlayerGunFire : MonoBehaviour
 {
     [Header("Gun settings")]
     [Tooltip("Time between gun fire")]
-    public int gunDamage = 0;                   // ÃÑ µ¥¹ÌÁö
-    public float gunFireInterval = 0.0f;        // ÃÑ ¹ß»ç °£°Ý
-    public float gunRange = 0.0f;               // ÃÑ ¹ß»ç °Å¸®
+    public int m_GunDamage = 0;                   // ÃÑ µ¥¹ÌÁö
+    public float m_GunFireInterval = 0.0f;        // ÃÑ ¹ß»ç °£°Ý
+    public float m_GunRange = 0.0f;               // ÃÑ ¹ß»ç °Å¸®
 
     [SerializeField]
     [Tooltip("Time between gun firing effects\nDefault value = 0.2f")]
-    private float gunEffectTimeInterval = 0.0f; // ÃÑ ¹ß»ç ÀÌÆåÆ® °£°Ý
+    private float m_GunEffectTimeInterval = 0.0f; // ÃÑ ¹ß»ç ÀÌÆåÆ® °£°Ý
 
-    private float timer = 0.0f;                 
-    private float hitDistance = 0.0f;
+    private float m_Timer = 0.0f;                 
+    private float m_HitDistance = 0.0f;
 
-    private Ray gunRay;
-    private RaycastHit gunRayHit;
+    private Ray m_GunRay;
+    private RaycastHit m_GunRayHit;
 
-    private Light gunLight;                     // ÃÑ±¸ ºÒºû
-    private LineRenderer gunLine;               // ÃÑ¾Ë ±¥Àû
-    private ParticleSystem gunParticle;         // ÃÑ±¸ È­¿°
-    private AudioSource gunAudio;               // ÃÑ ¹ß»ç ¼Ò¸®
+    private Light m_GunLight;                     // ÃÑ±¸ ºÒºû
+    private LineRenderer m_GunLine;               // ÃÑ¾Ë ±¥Àû
+    private ParticleSystem m_GunParticle;         // ÃÑ±¸ È­¿°
+    private AudioSource m_GunAudio;               // ÃÑ ¹ß»ç ¼Ò¸®
 
     private void Awake()
     {
-        gunLight = GetComponent<Light>();
-        gunLine = GetComponent<LineRenderer>();
-        gunAudio = GetComponent<AudioSource>();
-        gunParticle = GetComponentInChildren<ParticleSystem>();
+        m_GunLight = GetComponent<Light>();
+        m_GunLine = GetComponent<LineRenderer>();
+        m_GunAudio = GetComponent<AudioSource>();
+        m_GunParticle = GetComponentInChildren<ParticleSystem>();
     }
 
     private void Start()
     {
-        gunLight.enabled = false;
-        gunLine.enabled = false;
+        m_GunLight.enabled = false;
+        m_GunLine.enabled = false;
 
-        gunRay = new Ray();
+        m_GunRay = new Ray();
     }
 
     private void Update()
     {
-        if (GameManager.Instance.gameState != GameState.Play)
+        if (GameManager.Instance.GameState != GameState.Play)
         {
             return;
         }
 
-        timer += Time.deltaTime;
+        m_Timer += Time.deltaTime;
 
-        if (Input.GetMouseButton(0) && timer >= gunFireInterval)
+        if (Input.GetMouseButton(0) && m_Timer >= m_GunFireInterval)
         {
             FireControl(true);
         }
 
-        if(timer >= gunFireInterval * gunEffectTimeInterval)
+        if(m_Timer >= m_GunFireInterval * m_GunEffectTimeInterval)
         {
             FireControl(false);
         }
@@ -67,35 +67,35 @@ public class PlayerGunFire : MonoBehaviour
     /// <param name="isFire">ÃÑ ¹ß»ç ¿©ºÎ</param>
     private void FireControl(bool isFire)
     {
-        gunLight.enabled = isFire;
-        gunLine.enabled = isFire;
+        m_GunLight.enabled = isFire;
+        m_GunLine.enabled = isFire;
 
         if (!isFire)
         {
             return;
         }
 
-        gunRay.origin = transform.position;
-        gunRay.direction = gunLight.transform.forward;
+        m_GunRay.origin = transform.position;
+        m_GunRay.direction = m_GunLight.transform.forward;
 
-        if (!Physics.Raycast(gunRay.origin, gunRay.direction, out gunRayHit, gunRange))
+        if (!Physics.Raycast(m_GunRay.origin, m_GunRay.direction, out m_GunRayHit, m_GunRange))
         {
             return;
         }
 
-        hitDistance = Vector3.Distance(transform.position, gunRayHit.point);
-        gunLine.SetPosition(1, new Vector3(0.0f, 0.0f, hitDistance));
+        m_HitDistance = Vector3.Distance(transform.position, m_GunRayHit.point);
+        m_GunLine.SetPosition(1, new Vector3(0.0f, 0.0f, m_HitDistance));
 
-        gunAudio.Play();
-        gunParticle.Play();
+        m_GunAudio.Play();
+        m_GunParticle.Play();
 
-        timer = 0;
+        m_Timer = 0;
 
-        if (!gunRayHit.collider.gameObject.GetComponent<EnemyState>())
+        if (!m_GunRayHit.collider.gameObject.GetComponent<EnemyState>())
         {
             return;
         }
 
-        gunRayHit.rigidbody.gameObject.GetComponent<EnemyState>().EnemyTakeDamage(gunDamage, gunRayHit.point);
+        m_GunRayHit.rigidbody.gameObject.GetComponent<EnemyState>().EnemyTakeDamage(m_GunDamage, m_GunRayHit.point);
     }
 }

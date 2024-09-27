@@ -6,33 +6,46 @@ using GameSettingProperty;
 
 public class PlayerState : MonoBehaviour
 {
-    [NonSerialized] public bool isDead = false;         // 플레이어 죽음 상태
-    [NonSerialized] public int currentHp = 0;           // 플레이어 유동적인 체력
+    [NonSerialized] public bool m_IsDead = false;         // 플레이어 죽음 상태
+    [NonSerialized] public int m_CurrentHp = 0;           // 플레이어 유동적인 체력
 
-    [NonSerialized] public Slider playerHpSlider;       // 플레이어 체력을 표시하는 슬라이드바 UI
+    [NonSerialized] public Slider m_PlayerHpSlider;       // 플레이어 체력을 표시하는 슬라이드바 UI
 
     [Header("Player state settings")]
-    [SerializeField] private int playerHp = 0;          // 플레이어 기본 체력 값
+    [SerializeField] private int m_PlayerHp = 0;          // 플레이어 기본 체력 값
 
     [Header("Player Audioes")]
-    [SerializeField] private AudioClip playerDeadAudio; // 플레이어 죽은 소리 클립
+    [SerializeField] private AudioClip m_PlayerDeadAudio; // 플레이어 죽은 소리 클립
 
-    private AudioSource playerAudio;                    // 플레이어 오디오 소스 (기본 소리 값 : 플레이어 다치는 소리 클립)
-    private Animator playerAnimator;                    // 플레이어 애니메이션 컨트롤 애니메이터
-    private PlayerMove playerMove;                      // 플레이어 움직임 컴포넌트
-    private PlayerGaze playerGaze;                      // 플레이어 시선 컴포넌트
-    private PlayerGunFire playerGunFire;                // 플레이어 총 발사 컴포넌트
+    private AudioSource m_PlayerAudio;                    // 플레이어 오디오 소스 (기본 소리 값 : 플레이어 다치는 소리 클립)
+    private Animator m_PlayerAnimator;                    // 플레이어 애니메이션 컨트롤 애니메이터
+    private PlayerMove m_PlayerMove;                      // 플레이어 움직임 컴포넌트
+    private PlayerGaze m_PlayerGaze;                      // 플레이어 시선 컴포넌트
+    private PlayerGunFire m_PlayerGunFire;                // 플레이어 총 발사 컴포넌트
 
     private void Start()
     {
-        playerMove = GetComponent<PlayerMove>();
-        playerGaze = GetComponent<PlayerGaze>();
-        playerAudio = GetComponentInChildren<AudioSource>();
-        playerAnimator = GetComponentInChildren<Animator>();
-        playerGunFire = GetComponentInChildren<PlayerGunFire>();
+        PlayerReset();
+    }
 
-        currentHp = playerHp;
-        playerHpSlider.value = currentHp;
+    private void PlayerReset()
+    {
+        m_PlayerMove = GetComponent<PlayerMove>();
+        m_PlayerGaze = GetComponent<PlayerGaze>();
+        m_PlayerAudio = GetComponentInChildren<AudioSource>();
+        m_PlayerAnimator = GetComponentInChildren<Animator>();
+        m_PlayerGunFire = GetComponentInChildren<PlayerGunFire>();
+
+        GetComponent<CapsuleCollider>().enabled = true;
+
+        m_PlayerMove.enabled = true;
+        m_PlayerGaze.enabled = true;
+        m_PlayerGunFire.enabled = true;
+
+        m_IsDead = false;
+
+        m_CurrentHp = m_PlayerHp;
+        m_PlayerHpSlider.value = m_CurrentHp;
     }
 
     /// <summary>
@@ -41,11 +54,11 @@ public class PlayerState : MonoBehaviour
     /// <param name="damage">적 데미지</param>
     public void PlayerTakeDamage(int damage)
     {
-        if (currentHp > 0)
+        if (m_CurrentHp > 0)
         {
-            currentHp -= damage;
-            playerHpSlider.value = currentHp;
-            playerAudio.Play();
+            m_CurrentHp -= damage;
+            m_PlayerHpSlider.value = m_CurrentHp;
+            m_PlayerAudio.Play();
         }
         else
         {
@@ -58,23 +71,23 @@ public class PlayerState : MonoBehaviour
     /// </summary>
     public void PlayerDead()
     {
-        if (isDead)
+        if (m_IsDead)
         {
             return;
         }
 
-        isDead = true;
+        m_IsDead = true;
 
-        playerMove.enabled = false;
-        playerGaze.enabled = false;
-        playerGunFire.enabled = false;
+        m_PlayerMove.enabled = false;
+        m_PlayerGaze.enabled = false;
+        m_PlayerGunFire.enabled = false;
 
         GetComponent<CapsuleCollider>().enabled = false;
 
-        currentHp = 0;
+        m_CurrentHp = 0;
 
-        playerAnimator.SetTrigger("gameOver");
-        playerAudio.PlayOneShot(playerDeadAudio);
+        m_PlayerAnimator.SetTrigger("gameOver");
+        m_PlayerAudio.PlayOneShot(m_PlayerDeadAudio);
     }
 
     /// <summary>
@@ -85,7 +98,7 @@ public class PlayerState : MonoBehaviour
     /// </remarks>
     private void StartDeath()
     {
-        GameManager.Instance.AccordingToGameState(GameState.GameOver);
+        GameManager.Instance.GameState = GameState.GameOver;
     }
 
     /// <summary>

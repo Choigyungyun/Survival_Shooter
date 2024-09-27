@@ -9,7 +9,7 @@ using GameSettingProperty;
 
 public class EnemyState : MonoBehaviour
 {
-    [SerializeField] protected int enemyDamage = 0;           // 적 데미지
+    [SerializeField] private int enemyDamage = 0;           // 적 데미지
     [SerializeField] private int enemyHp = 0;               // 적 체력
     [SerializeField] private int enemyScore = 0;            // 적 스코어
     [SerializeField] private float attackInterval = 0.0f;   // 적 공격 간격
@@ -79,7 +79,7 @@ public class EnemyState : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.gameState == GameState.Play)
+        if (GameManager.Instance.GameState != GameState.Play)
         {
             timer += Time.deltaTime;
 
@@ -89,19 +89,19 @@ public class EnemyState : MonoBehaviour
                 timer = 0.0f;
             }
 
-            if (playerState.currentHp <= 0 && !playerState.isDead)
+            if (playerState.m_CurrentHp <= 0 && !playerState.m_IsDead)
             {
                 enemyAnimator.SetTrigger("gameOver");
             }
 
-            if (playerObject == null || playerState.isDead)
+            if (playerObject == null || playerState.m_IsDead)
             {
                 return;
             }
 
             enemyNavMeshAgent.SetDestination(playerObject.transform.position);
         }
-        else if (GameManager.Instance.gameState == GameState.RoundEnd)
+        else if (GameManager.Instance.GameState != GameState.RoundEnd)
         {
             enemyAnimator.SetBool("isDie", true);
             enemyNavMeshAgent.isStopped = true;

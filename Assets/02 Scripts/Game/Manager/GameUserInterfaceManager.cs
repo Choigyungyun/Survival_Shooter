@@ -20,27 +20,6 @@ public class GameUserInterfaceManager : MonoBehaviour
 
     public virtual void GetScore(int score) { }
 
-    public virtual void InterfaceStateControl(GameState gameState)
-    {
-        switch (gameState)
-        {
-            case GameState.Nothing:
-                break;
-            case GameState.Ready:
-                break;
-            case GameState.Play:
-                break;
-            case GameState.Pause:
-                break;
-            case GameState.RoundEnd:
-                break;
-            case GameState.GameOver:
-                break;
-            case GameState.EndGame:
-                break;
-        }
-    }
-
     #region Fade control Functions
 
     #endregion

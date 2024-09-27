@@ -17,7 +17,7 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.gameState != GameState.Play)
+        if (GameManager.Instance.GameState != GameState.Play)
         {
             return;
         }
@@ -26,7 +26,7 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.gameState != GameState.Play)
+        if (GameManager.Instance.GameState != GameState.Play)
         {
             return;
         }

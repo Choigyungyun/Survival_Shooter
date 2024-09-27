@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class CanvasManager : MonoBehaviour
 {
-    protected float m_CurrentFadeTime;
+    private const float c_CurrentFadeTime = 1.0f;
 
     protected GameObject m_PreviousPanel;
     protected Image m_CurrentFadeImage;
@@ -17,11 +17,11 @@ public class CanvasManager : MonoBehaviour
             return;
         }
 
+        m_PreviousPanel = panel;
+
         if (isFade)
         {
-            StartCoroutine(PanelChange(panel, m_PreviousPanel, m_CurrentFadeTime));
-
-            m_PreviousPanel = panel;
+            StartCoroutine(PanelChange(panel, m_PreviousPanel, c_CurrentFadeTime));
         }
         else
         {
@@ -52,7 +52,7 @@ public class CanvasManager : MonoBehaviour
         while (percent < 1)
         {
             timer += Time.deltaTime;
-            percent = timer / m_CurrentFadeTime;
+            percent = timer / c_CurrentFadeTime;
 
             color.a = Mathf.Lerp(startAlpha, endAlpha, percent);
 
@@ -73,7 +73,7 @@ public class CanvasManager : MonoBehaviour
     {
         StartCoroutine(PanelFadeControl(m_CurrentFadeImage, 0.0f, 1.0f, 0.0f));
 
-        yield return new WaitForSeconds(m_CurrentFadeTime);
+        yield return new WaitForSeconds(c_CurrentFadeTime);
 
         previousePanel.SetActive(false);
         nextPanel.SetActive(true);

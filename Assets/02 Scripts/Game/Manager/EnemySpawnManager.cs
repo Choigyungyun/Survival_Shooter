@@ -12,71 +12,44 @@ public class EnemySpawnManager : MonoBehaviour
 
     [Header("Enemy Spawn Transforms")]
     [SerializeField] private Transform[] enemySpawnTransforms;
+
     [Tooltip("Set the enemy's parent object.")]
     [SerializeField] private Transform enemyIndexTransform;
 
-    private int maxEnemySpawn = 0;
-    private float enemySpawnInterval = 0.0f;
-    private float timer = 0.0f;
+    private int m_MaxSpawnEnemy = 0;
+    private float m_IntervalSpawnEnemy = 0.0f;
+    private float m_Timer = 0.0f;
+
+    private void Start()
+    {
+        InitializeSpawnEnemy();
+    }
 
     private void Update()
     {
-        if(GameManager.Instance.gameState != GameState.Play)
+        if(GameManager.Instance.GameState != GameState.Play)
         {
             return;
         }
-        timer += Time.deltaTime;
-        SpawnEnemyToDifficult(GameManager.Instance.gameModeDifficult);
+        m_Timer += Time.deltaTime;
+
+        SpawnEnemy(SpawnEnemyProbability(UnityEngine.Random.Range(0, 100)));
     }
 
-    public void InitializeSpawnDifficult(GameModeDifficulty mode)
+    private void InitializeSpawnEnemy()
     {
-        GameManager.Instance.gameModeDifficult = mode;
-
-        switch (mode)
-        {
-            case GameModeDifficulty.None:
-                break;
-            case GameModeDifficulty.Easy:
-                maxEnemySpawn = 15;
-                enemySpawnInterval = 2f;
-                break;
-            case GameModeDifficulty.Nomal:
-                maxEnemySpawn = 25;
-                enemySpawnInterval = 1.25f;
-                break;
-            case GameModeDifficulty.Hard:
-                maxEnemySpawn = 35;
-                enemySpawnInterval = 1f;
-                break;
-        }
+        m_MaxSpawnEnemy = 25;
+        m_IntervalSpawnEnemy = 1.5f;
 
         Debug.Log($"Settings according to mode registration are now ready.\n" +
-                  $"Game State : {GameManager.Instance.gameState}\n" +
-                  $"Game mode : {GameManager.Instance.gameModeDifficult}\n" +
-                  $"Max Enemy Spawn : {maxEnemySpawn}\n" +
-                  $"Enemy Spawn Interval : {enemySpawnInterval}\n");
-    }
-
-    public void SpawnEnemyToDifficult(GameModeDifficulty mode)
-    {
-        switch (mode)
-        {
-            case GameModeDifficulty.None:
-                break;
-            case GameModeDifficulty.Easy:
-                SpawnEnemy(EasyModeSpawnPercentage(UnityEngine.Random.Range(0, 100)));
-                break;
-            case GameModeDifficulty.Nomal:
-                break;
-            case GameModeDifficulty.Hard:
-                break;
-        }
+                  $"Game State : {GameManager.Instance.GameState}\n" +
+                  $"Max Enemy Spawn : {m_MaxSpawnEnemy}\n" +
+                  $"Enemy Spawn Interval : {m_IntervalSpawnEnemy}\n");
     }
 
     private void SpawnEnemy(int enemyTypeNumber)
     {
-        if(timer <= enemySpawnInterval || enemyIndexTransform.childCount == maxEnemySpawn)
+        if(m_Timer <= m_IntervalSpawnEnemy || enemyIndexTransform.childCount == m_MaxSpawnEnemy)
         {
             return;
         }
@@ -89,10 +62,10 @@ public class EnemySpawnManager : MonoBehaviour
 
         enemyObject.transform.parent = enemyIndexTransform;
 
-        timer = 0.0f;
+        m_Timer = 0.0f;
     }
 
-    private int EasyModeSpawnPercentage(int randomNumber)
+    private int SpawnEnemyProbability(int randomNumber)
     {
         if(randomNumber < 60)
         {
@@ -106,6 +79,12 @@ public class EnemySpawnManager : MonoBehaviour
         {
             return 2;
         }
+    }
+
+    private int GetRandomSpawn(Transform[] spawnerTransforms)
+    {
+        int spawner = spawnerTransforms.Length;
+        return UnityEngine.Random.Range(0, spawner);
     }
 
     /// <summary>
@@ -124,9 +103,4 @@ public class EnemySpawnManager : MonoBehaviour
         return (T)values.GetValue(UnityEngine.Random.Range(1, values.Length));
     }
 
-    private int GetRandomSpawn(Transform[] spawnerTransforms)
-    {
-        int spawner = spawnerTransforms.Length;
-        return UnityEngine.Random.Range(0, spawner);
-    }
 }
