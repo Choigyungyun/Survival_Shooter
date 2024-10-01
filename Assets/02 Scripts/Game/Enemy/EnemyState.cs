@@ -79,7 +79,7 @@ public class EnemyState : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GameState != GameState.Play)
+        if (GameManager.Instance.m_GameState != GameState.Play)
         {
             timer += Time.deltaTime;
 
@@ -101,7 +101,7 @@ public class EnemyState : MonoBehaviour
 
             enemyNavMeshAgent.SetDestination(playerObject.transform.position);
         }
-        else if (GameManager.Instance.GameState != GameState.RoundEnd)
+        else if (GameManager.Instance.m_GameState != GameState.RoundEnd)
         {
             enemyAnimator.SetBool("isDie", true);
             enemyNavMeshAgent.isStopped = true;

@@ -1,7 +1,6 @@
+using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 /// <summary>
 /// 게임 상태 열거
@@ -12,36 +11,19 @@ public enum GameState
     Ready,
     Play,
     Pause,
+    Return,
     RoundEnd,
     GameOver
 }
 
 public class GameManager : GenericSingleton<GameManager>
 {
-    [HideInInspector]
-    public GameState GameState
-    {
-        get
-        {
-            return m_GameState;
-        }
-        set
-        {
-            switch (value)
-            {
-                case GameState.Ready:
-                    break;
-                case GameState.Play:
-                    break;
-                case GameState.Pause:
-                    break;
-                case GameState.RoundEnd:
-                    break;
-                case GameState.GameOver:
-                    break;
-            }
-        }
-    }
+    public Action<float> StartTimeCount;
+    public Action<float> RoundTimeCount;
+    public Action<int> ScoreCount;
+    public Action<int> RoundCount;
+
+    public GameState m_GameState;
     
     [SerializeField] private GameObject m_SpawnManagerObject;                                     // 스폰 매니저 오브젝트
     [SerializeField] private GameObject m_GameUiManagerObject;                                    // 게임 UI 매니저 오브젝트
@@ -50,11 +32,12 @@ public class GameManager : GenericSingleton<GameManager>
     private PlayerSpawnManager m_PlayerSpawnManager;                                              // 플레이어 스폰 관리
     private EnemySpawnManager m_EnemySpawnManager;                                                // 적 스폰 관리
 
-    private GameState m_GameState;
 
     private int m_GameScore = 0;                                                                  // 게임 스코어
     private int m_GameRound = 1;                                                                  // 게임 라운드
-    private float m_StartTime = 60.9f;
+
+    private const float c_RoundTime = 60.9f;
+    private const float c_StartTime = 3.9f;
 
     private void Awake()
     {
@@ -67,6 +50,14 @@ public class GameManager : GenericSingleton<GameManager>
 
     }
 
+    private void GameReset()
+    {
+        m_GameScore = 0;
+        m_GameRound = 1;
+
+        OnGameState(GameState.Ready);
+    }
+
     public void OnGameState(GameState state)
     {
         m_GameState = state;
@@ -74,10 +65,14 @@ public class GameManager : GenericSingleton<GameManager>
         switch (state)
         {
             case GameState.Ready:
+                ScoreCount?.Invoke(m_GameScore);
+                RoundCount?.Invoke(m_GameRound);
                 break;
             case GameState.Play:
                 break;
             case GameState.Pause:
+                break;
+            case GameState.Return:
                 break;
             case GameState.RoundEnd:
                 break;
@@ -89,6 +84,8 @@ public class GameManager : GenericSingleton<GameManager>
     public void AddScore(int score)
     {
         m_GameScore += score;
+
+        ScoreCount?.Invoke(m_GameScore);
     }
 
     private IEnumerator RoundTime(float maxTime)
@@ -99,11 +96,25 @@ public class GameManager : GenericSingleton<GameManager>
 
             if (maxTime > 0.0f)
             {
+                RoundTimeCount?.Invoke(maxTime);
             }
             else
             {
                 m_GameRound += 1;
+
+                RoundCount?.Invoke(m_GameRound);
             }
+            yield return null;
+        }
+    }
+
+    private IEnumerator CountDown(float maxTime)
+    {
+        while (maxTime > 0.0f)
+        {
+            maxTime -= Time.deltaTime;
+
+            StartTimeCount?.Invoke(maxTime);
             yield return null;
         }
     }

@@ -43,7 +43,7 @@ public class PlayerGunFire : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GameState != GameState.Play)
+        if (GameManager.Instance.m_GameState != GameState.Play)
         {
             return;
         }

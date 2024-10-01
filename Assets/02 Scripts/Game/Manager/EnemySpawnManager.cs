@@ -27,7 +27,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     private void Update()
     {
-        if(GameManager.Instance.GameState != GameState.Play)
+        if(GameManager.Instance.m_GameState != GameState.Play)
         {
             return;
         }
@@ -42,7 +42,7 @@ public class EnemySpawnManager : MonoBehaviour
         m_IntervalSpawnEnemy = 1.5f;
 
         Debug.Log($"Settings according to mode registration are now ready.\n" +
-                  $"Game State : {GameManager.Instance.GameState}\n" +
+                  $"Game State : {GameManager.Instance.m_GameState}\n" +
                   $"Max Enemy Spawn : {m_MaxSpawnEnemy}\n" +
                   $"Enemy Spawn Interval : {m_IntervalSpawnEnemy}\n");
     }

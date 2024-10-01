@@ -98,7 +98,7 @@ public class PlayerState : MonoBehaviour
     /// </remarks>
     private void StartDeath()
     {
-        GameManager.Instance.GameState = GameState.GameOver;
+        GameManager.Instance.OnGameState(GameState.GameOver);
     }
 
     /// <summary>
