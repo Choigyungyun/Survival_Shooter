@@ -314,7 +314,7 @@ MonoBehaviour:
   m_SettingPanel: {fileID: 1207570990}
   m_FadePanel: {fileID: 114762639}
   m_ScoreText: {fileID: 690912817}
-  m_RoundText: {fileID: 2011362309}
+  m_RoundTimeText: {fileID: 2011362309}
   m_StateText: {fileID: 177614297}
   m_PauseButton: {fileID: 1243534609}
   m_ReturnButton: {fileID: 890115137}
@@ -3173,8 +3173,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_GameState: 0
-  m_SpawnManagerObject: {fileID: 0}
-  m_GameUiManagerObject: {fileID: 0}
+  m_GameScore: 0
+  m_GameRound: 1
+  m_SpawnManagerObject: {fileID: 1335461426}
 --- !u!4 &1519062104
 Transform:
   m_ObjectHideFlags: 0

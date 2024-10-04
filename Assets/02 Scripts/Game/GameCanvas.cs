@@ -13,7 +13,7 @@ public class GameCanvas : CanvasManager
 
     [Header("Scoreboard panel texts")]
     [SerializeField] private Text m_ScoreText;
-    [SerializeField] private Text m_RoundText;
+    [SerializeField] private Text m_RoundTimeText;
 
     [Header("Fade panel texts")]
     [SerializeField] private Text m_StateText;
@@ -34,6 +34,16 @@ public class GameCanvas : CanvasManager
     {
         GameManager.Instance.RoundCount += SetGameRound;
         GameManager.Instance.ScoreCount += SetGameScore;
+        GameManager.Instance.RoundTimeCount += SetRoundTime;
+        GameManager.Instance.StartTimeCount += StartTime;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.RoundCount -= SetGameRound;
+        GameManager.Instance.ScoreCount -= SetGameScore;
+        GameManager.Instance.RoundTimeCount -= SetRoundTime;
+        GameManager.Instance.StartTimeCount -= StartTime;
     }
 
     private void Start()
@@ -67,20 +77,34 @@ public class GameCanvas : CanvasManager
         StartCoroutine(PanelFadeControl(m_CurrentFadeImage, 1.0f, 0.0f, 1.0f));
     }
 
+    #region 게임 이벤트 함수
     private void SetGameRound(int round)
     {
-
+        m_StateText.text = $"Day {round}";
     }
 
     private void SetGameScore(int score)
     {
-
+        m_ScoreText.text = $"Score : {score}";
     }
 
-    private IEnumerator GameReady()
+    private void SetRoundTime(float time)
     {
-        yield return new WaitForSeconds(3.0f);
+        m_RoundTimeText.text = $"Time : {(int)time}";
     }
+
+    private void StartTime(float time)
+    {
+        if(time > 0.0f)
+        {
+            m_StateText.text = $"{(int)time}";
+        }
+        else
+        {
+            m_FadePanel.SetActive(false);
+        }
+    }
+    #endregion
 
 
     #region 버튼 이벤트

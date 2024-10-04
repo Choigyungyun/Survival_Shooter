@@ -24,17 +24,15 @@ public class GameManager : GenericSingleton<GameManager>
     public Action<int> RoundCount;
 
     public GameState m_GameState;
-    
+
+    [HideInInspector] public int m_GameScore = 0;                                                 // 게임 스코어
+    [HideInInspector] public int m_GameRound = 1;                                                 // 게임 라운드
+
     [SerializeField] private GameObject m_SpawnManagerObject;                                     // 스폰 매니저 오브젝트
-    [SerializeField] private GameObject m_GameUiManagerObject;                                    // 게임 UI 매니저 오브젝트
 
     // 매니저
     private PlayerSpawnManager m_PlayerSpawnManager;                                              // 플레이어 스폰 관리
     private EnemySpawnManager m_EnemySpawnManager;                                                // 적 스폰 관리
-
-
-    private int m_GameScore = 0;                                                                  // 게임 스코어
-    private int m_GameRound = 1;                                                                  // 게임 라운드
 
     private const float c_RoundTime = 60.9f;
     private const float c_StartTime = 3.9f;
@@ -47,7 +45,7 @@ public class GameManager : GenericSingleton<GameManager>
 
     private void Start()
     {
-
+        GameReset();
     }
 
     private void GameReset()
@@ -65,8 +63,7 @@ public class GameManager : GenericSingleton<GameManager>
         switch (state)
         {
             case GameState.Ready:
-                ScoreCount?.Invoke(m_GameScore);
-                RoundCount?.Invoke(m_GameRound);
+                StartCoroutine(GameReady());
                 break;
             case GameState.Play:
                 break;
@@ -117,5 +114,15 @@ public class GameManager : GenericSingleton<GameManager>
             StartTimeCount?.Invoke(maxTime);
             yield return null;
         }
+    }
+
+    private IEnumerator GameReady()
+    {
+        ScoreCount?.Invoke(m_GameScore);
+        RoundCount?.Invoke(m_GameRound);
+        RoundTimeCount?.Invoke(c_RoundTime);
+        yield return new WaitForSeconds(2.0f);
+
+        StartCoroutine(CountDown(c_StartTime));
     }
 }
