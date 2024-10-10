@@ -102,5 +102,4 @@ public class EnemySpawnManager : MonoBehaviour
         Array values = Enum.GetValues(typeof(T));
         return (T)values.GetValue(UnityEngine.Random.Range(1, values.Length));
     }
-
 }

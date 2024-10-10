@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GameCanvas : CanvasManager
 {
-    [SerializeField] private GameObject m_ScoreBoardPanel;
+    [SerializeField] private GameObject m_GamePanel;
     [SerializeField] private GameObject m_PausePanel;
     [SerializeField] private GameObject m_SettingPanel;
     [SerializeField] private GameObject m_FadePanel;
@@ -53,9 +53,9 @@ public class GameCanvas : CanvasManager
         // 버튼 이벤트
         m_PauseButton.onClick.AddListener(Pause);
         m_ReturnButton.onClick.AddListener(ReturnGame);
-        m_SettingButton.onClick.AddListener(() => PanelControl(m_SettingPanel, true));
+        m_SettingButton.onClick.AddListener(() => PanelControl(m_SettingPanel, false));
         m_HomeButton.onClick.AddListener(Home);
-        m_SettingBackButton.onClick.AddListener(() => PanelControl(m_PausePanel, true));
+        m_SettingBackButton.onClick.AddListener(() => PanelControl(m_PausePanel, false));
 
         // 사운드 슬라이드
         m_MainSoundSlider.onValueChanged.AddListener(SoundManager.Instance.SetMasterVolume);
@@ -72,7 +72,7 @@ public class GameCanvas : CanvasManager
         m_StateText.gameObject.SetActive(true);
 
         m_CurrentFadeImage = m_FadePanel.GetComponent<Image>();
-        m_PreviousPanel = null;
+        m_PreviousPanel = m_GamePanel;
 
         StartCoroutine(PanelFadeControl(m_CurrentFadeImage, 1.0f, 0.0f, 1.0f));
     }
@@ -116,8 +116,8 @@ public class GameCanvas : CanvasManager
 
     private void ReturnGame()
     {
-        m_PreviousPanel = null;
-        PanelControl(m_PausePanel, false);
+        PanelControl(m_GamePanel, false);
+        GameManager.Instance.OnGameState(GameState.Play);
     }
 
     private void Home()

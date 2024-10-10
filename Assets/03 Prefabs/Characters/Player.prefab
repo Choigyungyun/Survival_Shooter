@@ -48,10 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 875c5b01030844d4cbbb2883b2217bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunDamage: 10
-  gunFireInterval: 0.15
-  gunRange: 60
-  gunEffectTimeInterval: 0.2
+  m_GunDamage: 10
+  m_GunFireInterval: 0.15
+  m_GunRange: 60
+  m_GunEffectTimeInterval: 0.1
 --- !u!108 &442182028
 Light:
   m_ObjectHideFlags: 0
@@ -704,8 +704,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f30de6fa63eb4e3489a2b8a98110af9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHp: 100
-  playerDeadAudio: {fileID: 8300000, guid: d36a393bca4582043982db9089e1694f, type: 3}
+  m_PlayerHp: 100
+  m_PlayerDeadAudio: {fileID: 8300000, guid: d36a393bca4582043982db9089e1694f, type: 3}
 --- !u!114 &5427440560604866116
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -34,8 +34,12 @@ public class GameManager : GenericSingleton<GameManager>
     private PlayerSpawnManager m_PlayerSpawnManager;                                              // 플레이어 스폰 관리
     private EnemySpawnManager m_EnemySpawnManager;                                                // 적 스폰 관리
 
-    private const float c_RoundTime = 60.9f;
+    private IEnumerator m_RoundTimeEnumerator;
+
+    private const float c_MaxRoundTime = 60.9f;
     private const float c_StartTime = 3.9f;
+
+    private float m_RoundTime;
 
     private void Awake()
     {
@@ -53,21 +57,27 @@ public class GameManager : GenericSingleton<GameManager>
         m_GameScore = 0;
         m_GameRound = 1;
 
+        m_RoundTime = c_MaxRoundTime;
+
+        m_RoundTimeEnumerator = RoundTime(m_RoundTime);
+
         OnGameState(GameState.Ready);
     }
 
     public void OnGameState(GameState state)
     {
         m_GameState = state;
-
+        Debug.Log(m_GameState);
         switch (state)
         {
             case GameState.Ready:
                 StartCoroutine(GameReady());
                 break;
             case GameState.Play:
+                StartCoroutine(m_RoundTimeEnumerator);
                 break;
             case GameState.Pause:
+                StopCoroutine(m_RoundTimeEnumerator);
                 break;
             case GameState.Return:
                 break;
@@ -90,6 +100,7 @@ public class GameManager : GenericSingleton<GameManager>
         while (maxTime > 0.0f)
         {
             maxTime -= Time.deltaTime;
+            m_RoundTime = maxTime;
 
             if (maxTime > 0.0f)
             {
@@ -120,9 +131,12 @@ public class GameManager : GenericSingleton<GameManager>
     {
         ScoreCount?.Invoke(m_GameScore);
         RoundCount?.Invoke(m_GameRound);
-        RoundTimeCount?.Invoke(c_RoundTime);
-        yield return new WaitForSeconds(2.0f);
+        RoundTimeCount?.Invoke(c_MaxRoundTime);
+        yield return new WaitForSeconds(3.0f);
 
         StartCoroutine(CountDown(c_StartTime));
+        yield return new WaitForSeconds(c_StartTime);
+
+        OnGameState(GameState.Play);
     }
 }

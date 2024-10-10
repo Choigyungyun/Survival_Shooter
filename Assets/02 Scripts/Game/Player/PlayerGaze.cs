@@ -10,9 +10,17 @@ public class PlayerGaze : MonoBehaviour
 
     private void Update()
     {
+        if(GameManager.Instance.m_GameState != GameState.Play)
+        {
+            return;
+        }
+
         playerRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (!Physics.Raycast(playerRay, out playerRayHit, Mathf.Infinity, LayerMask.GetMask("Floor"))) return;
+        if (!Physics.Raycast(playerRay, out playerRayHit, Mathf.Infinity, LayerMask.GetMask("Floor")))
+        {
+            return;
+        }
 
         offsetPosition = new Vector3(playerRayHit.point.x, transform.position.y, playerRayHit.point.z);
 

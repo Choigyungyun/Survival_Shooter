@@ -17,8 +17,6 @@ public class CanvasManager : MonoBehaviour
             return;
         }
 
-        m_PreviousPanel = panel;
-
         if (isFade)
         {
             StartCoroutine(PanelChange(panel, m_PreviousPanel, c_CurrentFadeTime));
@@ -28,6 +26,8 @@ public class CanvasManager : MonoBehaviour
             m_PreviousPanel.SetActive(false);
             panel.SetActive(true);
         }
+
+        m_PreviousPanel = panel;
     }
 
     /// <summary>
