@@ -23,12 +23,10 @@ public class GameManager : GenericSingleton<GameManager>
     public Action<int> ScoreCount;
     public Action<int> RoundCount;
 
-    public GameState m_GameState;
+    [HideInInspector] public GameState m_GameState;
 
     [HideInInspector] public int m_GameScore = 0;                                                 // 게임 스코어
     [HideInInspector] public int m_GameRound = 1;                                                 // 게임 라운드
-
-    [SerializeField] private GameObject m_SpawnManagerObject;                                     // 스폰 매니저 오브젝트
 
     // 매니저
     private PlayerSpawnManager m_PlayerSpawnManager;                                              // 플레이어 스폰 관리
@@ -40,12 +38,6 @@ public class GameManager : GenericSingleton<GameManager>
     private const float c_StartTime = 3.9f;
 
     private float m_RoundTime;
-
-    private void Awake()
-    {
-        m_PlayerSpawnManager = m_SpawnManagerObject.GetComponent<PlayerSpawnManager>();
-        m_EnemySpawnManager = m_SpawnManagerObject.GetComponent<EnemySpawnManager>();
-    }
 
     private void Start()
     {
@@ -80,6 +72,7 @@ public class GameManager : GenericSingleton<GameManager>
                 StopCoroutine(m_RoundTimeEnumerator);
                 break;
             case GameState.Return:
+                StartCoroutine(GameReturn());
                 break;
             case GameState.RoundEnd:
                 break;
@@ -134,6 +127,14 @@ public class GameManager : GenericSingleton<GameManager>
         RoundTimeCount?.Invoke(c_MaxRoundTime);
         yield return new WaitForSeconds(3.0f);
 
+        StartCoroutine(CountDown(c_StartTime));
+        yield return new WaitForSeconds(c_StartTime);
+
+        OnGameState(GameState.Play);
+    }
+
+    private IEnumerator GameReturn()
+    {
         StartCoroutine(CountDown(c_StartTime));
         yield return new WaitForSeconds(c_StartTime);
 

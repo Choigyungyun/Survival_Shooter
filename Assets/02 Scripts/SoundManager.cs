@@ -6,11 +6,17 @@ namespace SurvivalShooter
 {
     public class SoundManager : GenericSingleton<SoundManager>
     {
+        public float m_MasterVolume;
+        public float m_MusicVolume;
+        public float m_EffectsVolume;
+
         [SerializeField] private AudioMixer m_MasterMixer;
 
-        private void Start()
+        public void InitialSoundSetting()
         {
-            DontDestroyOnLoad(this);
+            m_MasterMixer.GetFloat("Master", out m_MasterVolume);
+            m_MasterMixer.GetFloat("Music", out m_MusicVolume);
+            m_MasterMixer.GetFloat("Effects", out m_EffectsVolume);
         }
 
         public void SetMasterVolume(float volume)

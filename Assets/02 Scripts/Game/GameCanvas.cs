@@ -74,6 +74,12 @@ public class GameCanvas : CanvasManager
         m_CurrentFadeImage = m_FadePanel.GetComponent<Image>();
         m_PreviousPanel = m_GamePanel;
 
+        SoundManager.Instance.InitialSoundSetting();
+
+        m_MainSoundSlider.value = SoundManager.Instance.m_MasterVolume;
+        m_MusicSoundSlider.value = SoundManager.Instance.m_MusicVolume;
+        m_EffectsSoundSlider.value = SoundManager.Instance.m_EffectsVolume;
+
         StartCoroutine(PanelFadeControl(m_CurrentFadeImage, 1.0f, 0.0f, 1.0f));
     }
 
@@ -117,7 +123,9 @@ public class GameCanvas : CanvasManager
     private void ReturnGame()
     {
         PanelControl(m_GamePanel, false);
-        GameManager.Instance.OnGameState(GameState.Play);
+        m_FadePanel.SetActive(true);
+
+        GameManager.Instance.OnGameState(GameState.Return);
     }
 
     private void Home()

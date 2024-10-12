@@ -50,6 +50,12 @@ public class HomeCanvas : CanvasManager
         m_CurrentFadeImage = m_FadePanel.GetComponent<Image>();
         m_PreviousPanel = m_HomePanel;
 
+        SoundManager.Instance.InitialSoundSetting();
+
+        m_MainSoundSlider.value = SoundManager.Instance.m_MasterVolume;
+        m_MusicSoundSlider.value = SoundManager.Instance.m_MusicVolume;
+        m_EffectsSoundSlider.value = SoundManager.Instance.m_EffectsVolume;
+
         StartCoroutine(PanelFadeControl(m_CurrentFadeImage, 1.0f, 0.0f, 0.0f));
     }
 

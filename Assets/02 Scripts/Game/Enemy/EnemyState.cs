@@ -98,7 +98,6 @@ public class EnemyState : MonoBehaviour
             {
                 return;
             }
-
             enemyNavMeshAgent.SetDestination(playerObject.transform.position);
         }
         else if (GameManager.Instance.m_GameState == GameState.RoundEnd)
@@ -108,7 +107,7 @@ public class EnemyState : MonoBehaviour
         }
         else
         {
-            enemyNavMeshAgent.isStopped = true;
+            enemyNavMeshAgent.SetDestination(transform.position);
         }
     }
 
