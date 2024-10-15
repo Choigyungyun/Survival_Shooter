@@ -26,11 +26,15 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.m_GameState != GameState.Play)
+        if (GameManager.Instance.m_GameState == GameState.Play)
         {
-            return;
+            moveAnimator.SetBool("IsWalking", isMoving);
         }
-        moveAnimator.SetBool("IsWalking", isMoving);
+        else
+        {
+            moveAnimator.SetBool("IsWalking", false);
+        }
+
     }
 
     /// <summary>

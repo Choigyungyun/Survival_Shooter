@@ -17,6 +17,7 @@ public class GameCanvas : CanvasManager
 
     [Header("Fade panel texts")]
     [SerializeField] private Text m_StateText;
+    [SerializeField] private Button m_FadeHomeButton;
 
     [Header("Buttons")]
     [SerializeField] private Button m_PauseButton;
@@ -35,7 +36,9 @@ public class GameCanvas : CanvasManager
         GameManager.Instance.RoundCount += SetGameRound;
         GameManager.Instance.ScoreCount += SetGameScore;
         GameManager.Instance.RoundTimeCount += SetRoundTime;
-        GameManager.Instance.StartTimeCount += StartTime;
+        GameManager.Instance.StartTimeCount += SetStartTime;
+        GameManager.Instance.OnGameRoundEnd += SetGameRoundEnd;
+        GameManager.Instance.OnGameOver += SetGameOver;
     }
 
     private void OnDisable()
@@ -43,7 +46,9 @@ public class GameCanvas : CanvasManager
         GameManager.Instance.RoundCount -= SetGameRound;
         GameManager.Instance.ScoreCount -= SetGameScore;
         GameManager.Instance.RoundTimeCount -= SetRoundTime;
-        GameManager.Instance.StartTimeCount -= StartTime;
+        GameManager.Instance.StartTimeCount -= SetStartTime;
+        GameManager.Instance.OnGameRoundEnd -= SetGameRoundEnd;
+        GameManager.Instance.OnGameOver -= SetGameOver;
     }
 
     private void Start()
@@ -56,6 +61,7 @@ public class GameCanvas : CanvasManager
         m_SettingButton.onClick.AddListener(() => PanelControl(m_SettingPanel, false));
         m_HomeButton.onClick.AddListener(Home);
         m_SettingBackButton.onClick.AddListener(() => PanelControl(m_PausePanel, false));
+        m_FadeHomeButton.onClick.AddListener(Home);
 
         // 사운드 슬라이드
         m_MainSoundSlider.onValueChanged.AddListener(SoundManager.Instance.SetMasterVolume);
@@ -67,9 +73,11 @@ public class GameCanvas : CanvasManager
     {
         m_PausePanel.SetActive(false);
         m_SettingPanel.SetActive(false);
-        m_FadePanel.SetActive(true);
+        m_FadeHomeButton.gameObject.SetActive(false);
 
+        m_FadePanel.SetActive(true);
         m_StateText.gameObject.SetActive(true);
+
 
         m_CurrentFadeImage = m_FadePanel.GetComponent<Image>();
         m_PreviousPanel = m_GamePanel;
@@ -99,7 +107,7 @@ public class GameCanvas : CanvasManager
         m_RoundTimeText.text = $"Time : {(int)time}";
     }
 
-    private void StartTime(float time)
+    private void SetStartTime(float time)
     {
         if(time > 0.0f)
         {
@@ -108,7 +116,18 @@ public class GameCanvas : CanvasManager
         else
         {
             m_FadePanel.SetActive(false);
+            m_StateText.gameObject.SetActive(false);
         }
+    }
+
+    private void SetGameRoundEnd()
+    {
+        StartCoroutine(RoundEnd());
+    }
+
+    private void SetGameOver()
+    {
+        StartCoroutine(GameOver());
     }
     #endregion
 
@@ -123,7 +142,9 @@ public class GameCanvas : CanvasManager
     private void ReturnGame()
     {
         PanelControl(m_GamePanel, false);
+
         m_FadePanel.SetActive(true);
+        m_StateText.gameObject.SetActive(true);
 
         GameManager.Instance.OnGameState(GameState.Return);
     }
@@ -133,4 +154,26 @@ public class GameCanvas : CanvasManager
         SceneManager.LoadScene("MainScene");
     }
     #endregion
+
+    private IEnumerator RoundEnd()
+    {
+        m_FadePanel.SetActive(true);
+        StartCoroutine(PanelFadeControl(m_CurrentFadeImage, 0.0f, 1.0f, 0.0f));
+        yield return new WaitForSeconds(1.0f);
+
+        m_StateText.gameObject.SetActive(true);
+        StartCoroutine(PanelFadeControl(m_CurrentFadeImage, 1.0f, 0.0f, 1.0f));
+        GameManager.Instance.OnGameState(GameState.Ready);
+    }
+
+    private IEnumerator GameOver()
+    {
+        m_FadePanel.SetActive(true);
+        StartCoroutine(PanelFadeControl(m_CurrentFadeImage, 0.0f, 1.0f, 1.0f));
+        yield return new WaitForSeconds(1.0f);
+
+        m_StateText.gameObject.SetActive(true);
+        m_FadeHomeButton.gameObject.SetActive(true);
+        m_StateText.text = "Game Over";
+    }
 }

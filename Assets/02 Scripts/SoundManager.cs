@@ -12,6 +12,11 @@ namespace SurvivalShooter
 
         [SerializeField] private AudioMixer m_MasterMixer;
 
+        private void Awake()
+        {
+            DontDestroy();
+        }
+
         public void InitialSoundSetting()
         {
             m_MasterMixer.GetFloat("Master", out m_MasterVolume);

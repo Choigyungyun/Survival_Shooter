@@ -109,6 +109,6 @@ public class PlayerState : MonoBehaviour
     /// </remarks>
     private void RestartLevel()
     {
-
+        GameManager.Instance.OnGameOver?.Invoke();
     }
 }

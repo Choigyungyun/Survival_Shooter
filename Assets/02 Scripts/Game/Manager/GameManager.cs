@@ -22,11 +22,15 @@ public class GameManager : GenericSingleton<GameManager>
     public Action<float> RoundTimeCount;
     public Action<int> ScoreCount;
     public Action<int> RoundCount;
+    public Action OnGameRoundEnd;
+    public Action OnGameOver;
 
     [HideInInspector] public GameState m_GameState;
 
     [HideInInspector] public int m_GameScore = 0;                                                 // 게임 스코어
     [HideInInspector] public int m_GameRound = 1;                                                 // 게임 라운드
+
+    [SerializeField] private GameObject m_SpawnManager;
 
     // 매니저
     private PlayerSpawnManager m_PlayerSpawnManager;                                              // 플레이어 스폰 관리
@@ -41,6 +45,9 @@ public class GameManager : GenericSingleton<GameManager>
 
     private void Start()
     {
+        m_PlayerSpawnManager = m_SpawnManager.GetComponent<PlayerSpawnManager>();
+        m_EnemySpawnManager = m_SpawnManager.GetComponent<EnemySpawnManager>();
+
         GameReset();
     }
 
@@ -48,10 +55,6 @@ public class GameManager : GenericSingleton<GameManager>
     {
         m_GameScore = 0;
         m_GameRound = 1;
-
-        m_RoundTime = c_MaxRoundTime;
-
-        m_RoundTimeEnumerator = RoundTime(m_RoundTime);
 
         OnGameState(GameState.Ready);
     }
@@ -63,6 +66,7 @@ public class GameManager : GenericSingleton<GameManager>
         switch (state)
         {
             case GameState.Ready:
+                m_PlayerSpawnManager.ResetPlayer();
                 StartCoroutine(GameReady());
                 break;
             case GameState.Play:
@@ -75,8 +79,11 @@ public class GameManager : GenericSingleton<GameManager>
                 StartCoroutine(GameReturn());
                 break;
             case GameState.RoundEnd:
+                OnGameRoundEnd?.Invoke();
+                RoundCount?.Invoke(m_GameRound);
                 break;
             case GameState.GameOver:
+                StopCoroutine(m_RoundTimeEnumerator);
                 break;
         }
     }
@@ -103,7 +110,7 @@ public class GameManager : GenericSingleton<GameManager>
             {
                 m_GameRound += 1;
 
-                RoundCount?.Invoke(m_GameRound);
+                OnGameState(GameState.RoundEnd);
             }
             yield return null;
         }
@@ -125,6 +132,10 @@ public class GameManager : GenericSingleton<GameManager>
         ScoreCount?.Invoke(m_GameScore);
         RoundCount?.Invoke(m_GameRound);
         RoundTimeCount?.Invoke(c_MaxRoundTime);
+
+        m_RoundTime = c_MaxRoundTime;
+        m_RoundTimeEnumerator = RoundTime(m_RoundTime);
+
         yield return new WaitForSeconds(3.0f);
 
         StartCoroutine(CountDown(c_StartTime));

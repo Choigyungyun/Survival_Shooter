@@ -31,4 +31,9 @@ public class PlayerSpawnManager : MonoBehaviour
         Camera.main.GetComponent<CameraMove>().targetTransform = currentPlayer.transform;
         currentPlayer.GetComponent<PlayerState>().m_PlayerHpSlider = hpSlider;
     }
+
+    public void ResetPlayer()
+    {
+        currentPlayer.transform.position = Vector3.zero;
+    }
 }

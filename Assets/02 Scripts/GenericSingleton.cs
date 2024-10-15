@@ -23,9 +23,9 @@ public class GenericSingleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    private void Awake()
+    protected void DontDestroy()
     {
-        if(instance != null)
+        if (instance != null)
         {
             return;
         }
