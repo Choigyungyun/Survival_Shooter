@@ -33,6 +33,8 @@ public class GameManager : GenericSingleton<GameManager>
     [SerializeField] private GameObject m_SpawnManager;
 
     // 매니저
+    [SerializeField] private AudioSource m_BackgroundAudio;
+
     private PlayerSpawnManager m_PlayerSpawnManager;                                              // 플레이어 스폰 관리
     private EnemySpawnManager m_EnemySpawnManager;                                                // 적 스폰 관리
 
@@ -71,6 +73,7 @@ public class GameManager : GenericSingleton<GameManager>
                 break;
             case GameState.Play:
                 StartCoroutine(m_RoundTimeEnumerator);
+                OnBackgroundMusic();
                 break;
             case GameState.Pause:
                 StopCoroutine(m_RoundTimeEnumerator);
@@ -93,6 +96,15 @@ public class GameManager : GenericSingleton<GameManager>
         m_GameScore += score;
 
         ScoreCount?.Invoke(m_GameScore);
+    }
+
+    private void OnBackgroundMusic()
+    {
+        if (m_BackgroundAudio.isPlaying == true)
+        {
+            return;
+        }
+        m_BackgroundAudio.Play();
     }
 
     private IEnumerator RoundTime(float maxTime)
