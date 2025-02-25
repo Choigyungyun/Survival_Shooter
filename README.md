@@ -1,4 +1,4 @@
-# Survival-Shooter
+# Shooting_Survival(Survival_Shooter)
 ### 개요
 
 <div align="center">
